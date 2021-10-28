@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddActivity">
+
+    <ImageButton
+        android:id="@+id/backButtonItem"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="200px"
+        android:layout_height="200px"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/teacherAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Teacher"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/housingAdd" />
+
+    <EditText
+        android:id="@+id/auditoryAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Auditory"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subjectAdd" />
+
+    <EditText
+        android:id="@+id/housingAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Housing"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/auditoryAdd" />
+
+    <EditText
+        android:id="@+id/subjectAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Subject"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/shiftStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/shift"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shiftStatus">
+
+        <RadioButton
+            android:id="@+id/fWeek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/fWeek" />
+
+        <RadioButton
+            android:id="@+id/sWeek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sWeek" />
+    </RadioGroup>
+
+    <ImageView
+        android:id="@+id/imageAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+        tools:srcCompat="@tools:sample/avatars" />
+
+<TimePicker
+    android:id="@+id/timePicker"
+    android:layout_width="243dp"
+    android:layout_height="149dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="16dp"
+    android:scaleX=".8"
+    android:scaleY=".8
+"
+    android:timePickerMode="spinner"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+
+    <!--<DatePicker
+    android:id="@+id/datePicker"
+    android:layout_width="239dp"
+    android:layout_height="165dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="16dp"
+    android:calendarViewShown="false"
+    android:datePickerMode="spinner"
+    android:scaleX=".8"
+    android:scaleY=".8"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/teacherAdd" /> !-->
+
+
+    <ImageButton
+        android:id="@+id/backButtonAdd"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="200px"
+        android:layout_height="200px"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="221dp"
+        android:layout_height="220dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/teacherAdd" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

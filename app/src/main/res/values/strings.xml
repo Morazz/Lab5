@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Lab5</string>
+
+    <string name="mon">Monday</string>
+    <string name="tue">Tuesday</string>
+    <string name="wed">Wednesday</string>
+    <string name="thu">Thursday</string>
+    <string name="fri">Friday</string>
+    <string name="sat">Saturday</string>s
+    <string name="sun">Sunday</string>
+
+    <string name="shift">Shift</string>
+    <string name="fWeek">First week</string>
+    <string name="sWeek">Second week</string>
+
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="view">View</string>
+
+</resources>
