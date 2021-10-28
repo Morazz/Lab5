@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     TextView dayField;
     ListView listView;
     private List<Timetable> ttl;
+    Timetable selectedItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,17 +40,18 @@ public class MainActivity extends AppCompatActivity {
 
         listView.setAdapter(adapter);
 
-        /*
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        registerForContextMenu(listView);
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
+            public boolean onItemLongClick(AdapterView<?> parent, View itemClicked, int position,
                                     long id) {
-                Timetable selectedItem = (Timetable) parent.getItemAtPosition(position);
-                showItem(selectedItem);
+                selectedItem = (Timetable) parent.getItemAtPosition(position);
+                dayField.setText(selectedItem.getHousing());
+                return true;
             }
         });
 
-         */
     }
 
     @Override
@@ -64,9 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        dayField.setText(item.getItemId());
-        return super.onOptionsItemSelected(item);
-        /*
         switch (item.getItemId())
         {
             case R.id.addMenu:
@@ -78,8 +77,6 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
-         */
     }
 
     @Override
@@ -92,9 +89,18 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_item_context, menu);
     }
 
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.viewCM:
+                showItem(selectedItem);
+                break;
+        }
+        return super.onContextItemSelected(item);
+    }
 
-    public void Sort(String d) {
-        Toast.makeText(this, d, Toast.LENGTH_SHORT).show();
+    public void Sort() {
+
     }
 
     public void showItem(Timetable item) {
@@ -113,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void Add(MenuItem item) {
+    public void Add() {
         Intent intent = new Intent(this, AddActivity.class);
         startActivity(intent);
     }
