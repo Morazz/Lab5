@@ -20,13 +20,13 @@ public class Timetable implements Serializable {
     public String housing;
     public String time;
     public String teacher;
-    public Uri photoPath;
+    public String photoPath;
     public Boolean shift;
 
     public Timetable() {
     }
 
-    public Timetable(String subject, String day, int week, String auditory, String housing, String time, String teacher, Uri photoPath, Boolean shift) {
+    public Timetable(String subject, String day, int week, String auditory, String housing, String time, String teacher, String photoPath, Boolean shift) {
         this.subject = subject;
         this.day = day;
         this.week = week;

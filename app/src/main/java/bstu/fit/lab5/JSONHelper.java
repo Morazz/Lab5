@@ -13,7 +13,7 @@
 
 class JSONHelper {
 
-    private static final String FILE_NAME = "ttll.json";
+    private static final String FILE_NAME = "data.json";
 
     static boolean exportToJSON(Context context, List<Timetable> dataList) {
 

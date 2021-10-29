@@ -53,7 +53,7 @@ public class ItemActivity extends AppCompatActivity {
             housingField.setText(ttElement.getHousing());
             teacherField.setText(ttElement.getTeacher());
             if (ttElement.getPhotoPath() != null)
-                teacherImage.setImageURI(ttElement.getPhotoPath());
+                teacherImage.setImageURI(Uri.parse(ttElement.getPhotoPath()));
             if(ttElement.shift) {
                 isShift.setText(getResources().getText(R.string.shift));
                 isShift.setTextColor(getResources().getColor(R.color.red));

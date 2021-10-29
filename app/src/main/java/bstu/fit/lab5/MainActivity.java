@@ -2,6 +2,8 @@ package bstu.fit.lab5;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -13,11 +15,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,10 +73,38 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
         inflater.inflate(R.menu.menu_add, menu);
         inflater.inflate(R.menu.menu_sort, menu);
         inflater.inflate(R.menu.menu_search, menu);
+
+        MenuItem search = menu.findItem(R.id.searchMenu);
+        SearchView searchView = (SearchView) search.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                List<Timetable> result = ttl.stream()
+                        .filter(item -> item.getSubject().contains(query))
+                        .collect(Collectors.toList());
+                adapter.ttl = result;
+                adapter.notifyDataSetChanged();
+                if( ! searchView.isIconified()) {
+                    searchView.setIconified(true);
+                }
+                search.collapseActionView();
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String s) {
+                List<Timetable> result = ttl.stream()
+                        .filter(item -> item.getSubject().contains(s))
+                        .collect(Collectors.toList());
+                adapter.ttl = result;
+                adapter.notifyDataSetChanged();
+                return false;
+            }
+        });
+
         return true;
     }
 

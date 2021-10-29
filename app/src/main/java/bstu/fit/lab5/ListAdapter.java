@@ -57,6 +57,7 @@ public class ListAdapter extends ArrayAdapter<Timetable> {
         TextView auditory = view.findViewById(R.id.audItem);
         TextView housing = view.findViewById(R.id.housItem);
         TextView shift = view.findViewById(R.id.shiftItem);
+        TextView day = view.findViewById(R.id.dItem);
         
         tte = ttl.get(position);
 
@@ -69,6 +70,7 @@ public class ListAdapter extends ArrayAdapter<Timetable> {
         time.setText(tte.getTime());
         auditory.setText(tte.getAuditory());
         housing.setText(tte.getHousing());
+        day.setText(tte.getDay());
 
         return view;
     }

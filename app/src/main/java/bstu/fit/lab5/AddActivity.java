@@ -74,7 +74,7 @@ public class AddActivity extends AppCompatActivity {
             housingAdd.setText(ttElement.getHousing());
             teacherAdd.setText(ttElement.getTeacher());
             if (ttElement.getPhotoPath() != null)
-                imageAdd.setImageURI(ttElement.getPhotoPath());
+                imageAdd.setImageURI(Uri.parse(ttElement.getPhotoPath()));
             if(ttElement.shift) {
                 shiftAdd.setChecked(true);
             }
@@ -113,11 +113,19 @@ public class AddActivity extends AppCompatActivity {
                 }
             }
         });
+
+        imageAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_add, menu);
         inflater.inflate(R.menu.menu_back, menu);
@@ -138,6 +146,8 @@ public class AddActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
@@ -208,7 +218,8 @@ public class AddActivity extends AppCompatActivity {
         tt.setTime(timeAdd.getHour()+":"+timeAdd.getMinute());
         tt.setDay(dayOfWeek);
         tt.setShift(shiftAdd.isChecked());
-        tt.setPhotoPath(imageURI);
+        if(imageURI != null)
+            tt.setPhotoPath(imageURI.toString());
     }
 
     Timetable findTTByid(int id){
