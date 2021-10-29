@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     private List<Timetable> ttl;
     Timetable selectedItem;
+    ListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +33,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ttl = new ArrayList<>();
+
         open();
-        ListAdapter adapter = new ListAdapter(this, R.layout.rowlayout, ttl);
+
+        adapter = new ListAdapter(this, R.layout.rowlayout, ttl);
 
         dayField = findViewById(R.id.dayField);
         listView = findViewById(R.id.listView);
@@ -47,8 +50,16 @@ public class MainActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View itemClicked, int position,
                                     long id) {
                 selectedItem = (Timetable) parent.getItemAtPosition(position);
-                dayField.setText(selectedItem.getHousing());
-                return true;
+                return false;
+            }
+        });
+
+        listView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+                MainActivity.super.onCreateContextMenu(menu, view, menuInfo);
+                MenuInflater inflater = getMenuInflater();
+                inflater.inflate(R.menu.menu_item_context, menu);
             }
         });
 
@@ -61,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_main, menu);
         inflater.inflate(R.menu.menu_add, menu);
         inflater.inflate(R.menu.menu_sort, menu);
+        inflater.inflate(R.menu.menu_search, menu);
         return true;
     }
 
@@ -69,24 +81,17 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId())
         {
             case R.id.addMenu:
-                Add();
+                add();
                 return true;
             case R.id.sortMenu:
-                Sort();
+                sort();
+                return true;
+            case R.id.searchMenu:
+                //sort();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo)
-    {
-        super.onCreateContextMenu(menu, v, menuInfo);
-
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_item_context, menu);
     }
 
     @Override
@@ -95,12 +100,25 @@ public class MainActivity extends AppCompatActivity {
             case R.id.viewCM:
                 showItem(selectedItem);
                 break;
+            case R.id.deleteCM:
+                delete(selectedItem);
+                break;
+            case R.id.editCM:
+                edit(selectedItem);
+                break;
         }
         return super.onContextItemSelected(item);
     }
 
-    public void Sort() {
+    public void sort() {
+        TimetableComparator comp = new TimetableComparator();
+        adapter.sort(comp);
+    }
 
+    public void delete(Timetable tte) {
+        adapter.remove(tte);
+        JSONHelper.exportToJSON(this,adapter.ttl);
+        open();
     }
 
     public void showItem(Timetable item) {
@@ -110,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void open(){
-            ttl = JSONHelper.importFromJSON(this);
+        ttl = JSONHelper.importFromJSON(this);
         if(ttl!=null){
             Toast.makeText(this, "Данные восстановлены", Toast.LENGTH_LONG).show();
         }
@@ -119,14 +137,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void Add() {
+    public void add() {
         Intent intent = new Intent(this, AddActivity.class);
         startActivity(intent);
     }
 
-    public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
-                            long id) {
-        Timetable selectedItem = (Timetable) parent.getItemAtPosition(position);
-        showItem(selectedItem);
+    public void edit(Timetable selectedItem) {
+        Intent intent = new Intent(this, AddActivity.class);
+        intent.putExtra(Timetable.class.getSimpleName(), selectedItem);
+        startActivity(intent);
     }
 }

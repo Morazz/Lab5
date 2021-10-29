@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Timetable implements Serializable {
+    public int id;
     public String subject;
     public String day;
     public int week;

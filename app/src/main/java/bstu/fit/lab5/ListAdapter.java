@@ -11,12 +11,15 @@ import android.widget.TextView;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 public class ListAdapter extends ArrayAdapter<Timetable> {
     private LayoutInflater inflater;
     private int layout;
-    private List<Timetable> ttl;
+    public List<Timetable> ttl;
+    public Timetable tte;
 
     public ListAdapter(Context context, int resource, List<Timetable> ttl) {
         super(context, resource, ttl);
@@ -27,7 +30,10 @@ public class ListAdapter extends ArrayAdapter<Timetable> {
 
     @Override
     public int getCount() {
-        return ttl.size();
+        if (ttl!=null)
+            return ttl.size();
+        else
+            return 0;
     }
 
     @Override
@@ -51,13 +57,14 @@ public class ListAdapter extends ArrayAdapter<Timetable> {
         TextView auditory = view.findViewById(R.id.audItem);
         TextView housing = view.findViewById(R.id.housItem);
         TextView shift = view.findViewById(R.id.shiftItem);
+        
+        tte = ttl.get(position);
 
-        Timetable tte = ttl.get(position);
-
-        if(tte.shift) {
+        if(tte.getShift()) {
             shift.setText(R.string.shift);
             shift.setTextColor(R.color.red);
         }
+
         subject.setText(tte.getSubject());
         time.setText(tte.getTime());
         auditory.setText(tte.getAuditory());

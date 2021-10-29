@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -29,8 +32,6 @@ public class ItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item);
 
-        ImageButton imageButton;
-        imageButton = findViewById(R.id.backButtonItem);
         subjectField = findViewById(R.id.subjectItem);
         dayField = findViewById(R.id.dayItem);
         weekField = findViewById(R.id.weekItem);
@@ -46,7 +47,7 @@ public class ItemActivity extends AppCompatActivity {
             ttElement = (Timetable) arguments.getSerializable(Timetable.class.getSimpleName());
             subjectField.setText(ttElement.getSubject());
             dayField.setText(ttElement.getDay());
-            weekField.setText(ttElement.getWeek());
+            //weekField.setText(ttElement.getWeek());
             timeField.setText(ttElement.getTime().toString());
             auditoryField.setText(ttElement.getAuditory());
             housingField.setText(ttElement.getHousing());
@@ -58,18 +59,29 @@ public class ItemActivity extends AppCompatActivity {
                 isShift.setTextColor(getResources().getColor(R.color.red));
             }
         }
-
-        imageButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                onBackButtonClick();
-            }
-        });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
 
-    public void onBackButtonClick () {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_back, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId())
+        {
+            case R.id.backMenu:
+                back();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void back () {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

@@ -23,15 +23,15 @@ import android.widget.RadioGroup;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class AddActivity extends AppCompatActivity {
 
-    ImageButton imageButton;
-    ImageButton imageButtonAdd;
     EditText subjectAdd;
     CalendarView dayAdd;
     TimePicker timeAdd;
@@ -42,23 +42,20 @@ public class AddActivity extends AppCompatActivity {
     ImageView imageAdd;
     RadioGroup weekAdd;
 
-    Timetable ttElement;
+    Timetable ttElement = new Timetable();
     String dayOfWeek;
     Uri imageURI;
-    private ArrayAdapter<Timetable> adapter;
-    private List<Timetable> tts;
+    boolean edit = false;
 
     static final int GALLERY_REQUEST = 1;
+    List<Timetable> ttList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+        ttList = JSONHelper.importFromJSON(this);
 
-        tts = new ArrayList<>();
-
-        imageButton = findViewById(R.id.backButtonItem);
-        imageButtonAdd = findViewById(R.id.backButtonAdd);
         subjectAdd = findViewById(R.id.subjectAdd);
         dayAdd = findViewById(R.id.calendarView);
         timeAdd = findViewById(R.id.timePicker);
@@ -68,14 +65,6 @@ public class AddActivity extends AppCompatActivity {
         teacherAdd = findViewById(R.id.teacherAdd);
         imageAdd = findViewById(R.id.imageAdd);
         weekAdd = findViewById(R.id.radioGroup);
-
-        imageButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                onBackButtonClick();
-            }
-        });
 
         Bundle arguments = getIntent().getExtras();
         if (arguments != null) {
@@ -89,9 +78,8 @@ public class AddActivity extends AppCompatActivity {
             if(ttElement.shift) {
                 shiftAdd.setChecked(true);
             }
-
+            edit = true;
         }
-
         dayAdd.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
             @Override
@@ -125,23 +113,6 @@ public class AddActivity extends AppCompatActivity {
                 }
             }
         });
-
-        imageAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
-            }
-        });
-
-        imageButton.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                addItem();
-            }
-        });
     }
 
     @Override
@@ -149,13 +120,23 @@ public class AddActivity extends AppCompatActivity {
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_add, menu);
+        inflater.inflate(R.menu.menu_back, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        addItem();
-        return super.onOptionsItemSelected(item);
+        switch(item.getItemId())
+        {
+            case R.id.addMenu:
+                addItem();
+                return true;
+            case R.id.backMenu:
+                back();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -171,32 +152,36 @@ public class AddActivity extends AppCompatActivity {
         }
     }
 
-    public void onBackButtonClick () {
+    public void back () {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
     public void addItem() {
-        String fWeek = getResources().getString(R.string.fWeek);
-        Timetable newElement  = new Timetable();
-        newElement.setAuditory(auditoryAdd.getText().toString());
-        newElement.setHousing(housingAdd.getText().toString());
-        newElement.setTeacher(teacherAdd.getText().toString());
-        newElement.setSubject(subjectAdd.getText().toString());
-        RadioButton radio = findViewById( weekAdd.getCheckedRadioButtonId());
-        if (radio.getText().toString().equals(fWeek)) {
-            newElement.setWeek(1);
+        if (edit) {
+            Timetable tte = findTTByid(ttElement.getId());
+            int index = ttList.indexOf(tte);
+            setItem(tte);
+            //ttList.remove(ttElement);
+            //ttList.add(tte);
         }
-        else
-            newElement.setWeek(2);
-        newElement.setTime(timeAdd.getHour()+":"+timeAdd.getMinute());
-        newElement.setDay(dayOfWeek);
-        newElement.setShift(shiftAdd.isChecked());
-        newElement.setPhotoPath(imageURI);
+        else {
+            Timetable newElement = new Timetable();
+            if (ttList != null) {
+                Random r = new Random();
+                int id = ttList.size() + r.nextInt(4000);
+                newElement.setId(id);
+                setItem(newElement);
+                ttList.add(newElement);
+            } else {
+                newElement.setId(1);
+                setItem(newElement);
+                ttList = new ArrayList<Timetable>();
+                ttList.add(newElement);
+            }
+        }
 
-        tts.add(newElement);
-
-        boolean result = JSONHelper.exportToJSON(this, tts);
+        boolean result = JSONHelper.exportToJSON(this, ttList);
         if(result){
             Toast.makeText(this, "Данные сохранены", Toast.LENGTH_LONG).show();
         }
@@ -206,5 +191,32 @@ public class AddActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    public void setItem(Timetable tt) {
+        String fWeek = getResources().getString(R.string.fWeek);
+        tt.setAuditory(auditoryAdd.getText().toString());
+        tt.setHousing(housingAdd.getText().toString());
+        tt.setTeacher(teacherAdd.getText().toString());
+        tt.setSubject(subjectAdd.getText().toString());
+        RadioButton radio = findViewById( weekAdd.getCheckedRadioButtonId());
+        if (radio.getText().toString().equals(fWeek)) {
+            tt.setWeek(1);
+        }
+        else
+            tt.setWeek(2);
+        tt.setTime(timeAdd.getHour()+":"+timeAdd.getMinute());
+        tt.setDay(dayOfWeek);
+        tt.setShift(shiftAdd.isChecked());
+        tt.setPhotoPath(imageURI);
+    }
+
+    Timetable findTTByid(int id){
+        for (Timetable timetable : ttList) {
+            if (timetable.getId() == id) {
+                return timetable;
+            }
+        }
+        return null;
     }
 }
